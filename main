@@ -1,0 +1,66 @@
+import random
+
+choices = ["rock", "paper", "scissors", "nuke", "poutine"]
+
+# Rules: What beats what (Key: Winner, Value: List of what it beats)
+rules = {
+    "rock": ["scissors"],
+    "paper": ["rock", "poutine"],
+    "scissors": ["paper", "poutine"],
+    "nuke": ["rock", "paper"],
+    "poutine": ["nuke", "rock"]
+}
+
+# For the AI to pick a winner against the player
+counters = {
+    "rock": "paper",
+    "paper": "scissors",
+    "scissors": "poutine", # Based on your rule that poutine beats scissors
+    "nuke": "poutine",
+    "poutine": "paper"
+}
+
+player_history = {"rock": 0, "paper": 0, "scissors": 0, "nuke": 0, "poutine": 0}
+
+print("--- Welcome to the Ultimate Challenge ---")
+difficulty = input("Choose difficulty (easy, medium, impossible): ").lower()
+
+while True:
+    print("\n" + "-"*30)
+    player = input("Your move (or 'quit'): ").lower()
+
+    if player == "quit":
+        break
+    if player not in choices:
+        print("Not a valid move!")
+        continue
+
+    # --- DIFFICULTY LOGIC ---
+    if difficulty == "easy":
+        # Purely random
+        computer = random.choice(choices)
+        
+    elif difficulty == "medium":
+        # Predicts based on your most used move
+        most_frequent = max(player_history, key=player_history.get)
+        if player_history[most_frequent] == 0:
+            computer = random.choice(choices)
+        else:
+            computer = counters[most_frequent]
+            
+    else: # IMPOSSIBLE
+        # The AI sees your 'player' variable and picks the counter instantly
+        computer = counters[player]
+
+    # Update history for the Medium logic
+    player_history[player] += 1
+
+    print(f"Computer chose: {computer}")
+
+    # --- WIN/LOSS LOGIC ---
+    if player == computer:
+        print("Result: Draw!")
+    elif computer in rules[player]:
+        print(f"Result: You Win! {player.capitalize()} beats {computer}.")
+    else:
+        print(f"Result: You Lose! {computer.capitalize()} beats {player}.")
