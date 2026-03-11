@@ -1,3 +1,4 @@
+# R0aX first game on github not made by AI (I think)
 import random
 
 choices = ["rock", "paper", "scissors", "nuke", "poutine"]
